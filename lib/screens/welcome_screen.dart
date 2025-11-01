@@ -28,33 +28,38 @@ var greetingText = const Center(
 );
 
 // Login Button Variable
-var loginButton = Container(
-  width: 350,
-  height: 70,
-  margin: const EdgeInsets.only(top: 90), // margin above the button for space
-  child: ElevatedButton( // shadow or raised appearance
-    onPressed: () {
-      // TODO: Add login logic or navigation
-    },
-    style: ElevatedButton.styleFrom( // customize the visual style of a Material button
-      backgroundColor: const Color(0xFFD1B48C), // light brown color
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
+Widget loginButton(BuildContext context) {
+  return Container(
+    width: 350,
+    height: 70,
+    margin: const EdgeInsets.only(top: 90), // margin above the button for space
+    child: ElevatedButton( // shadow or raised appearance
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LogInScreen()),
+        );
+      },
+      style: ElevatedButton
+          .styleFrom( // customize the visual style of a Material button
+        backgroundColor: const Color(0xFFD1B48C), // light brown color
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        elevation: 5,
       ),
-      elevation: 5,
-    ),
-    child: const Text(
-      "Login",
-      style: TextStyle(
-        fontFamily: 'Poppins',
-        color: Colors.black,
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
+      child: const Text(
+        "Login",
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          color: Colors.black,
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     ),
-  ),
-);
-
+  );
+}
 // Sign Up Button Function
 Widget signupButton(BuildContext context) {
   return Container(
@@ -105,7 +110,7 @@ class WelcomeScreen extends StatelessWidget {
         children: [
           logo,
           greetingText,
-          loginButton,
+          loginButton(context),
           signupButton(context),
         ],
       ),
