@@ -4,10 +4,12 @@ import 'package:login_registration_app/resuable_widgets/login-registration.dart'
 import 'sign_up.dart'; // for navigation to Sign Up page
 import 'package:shared_preferences/shared_preferences.dart'; // shared preference package for local storage
 import 'home_screen.dart';
+import 'package:login_registration_app/themes/theme_controller.dart';
 
 
 class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+  final ThemeController themeController; // for toggling from the AppBar action if needed
+  const LogInScreen({super.key, required this.themeController});
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
@@ -18,16 +20,18 @@ class _LogInScreenState extends State<LogInScreen> {
   // TextEditingControllers read the text typed into the email and password field
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscure = true; // toggle for password visibility
 
-  Widget loginTitleText() {
-    return const Center(
+  Widget loginTitleText(BuildContext context) {
+    final color = Theme.of(context).colorScheme.onSurface;
+    return Center(
       child: Text(
         "Login",
         style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 30,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: color,
         ),
       ),
     );
@@ -59,7 +63,7 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget passwordField() {
     return TextFormField(
       controller: _passwordController,
-      obscureText: true,
+      obscureText: _obscure,
       decoration: InputDecoration(
         labelText: "Password",
         labelStyle: const TextStyle(fontFamily: 'Poppins'),
@@ -67,6 +71,10 @@ class _LogInScreenState extends State<LogInScreen> {
           borderRadius: BorderRadius.circular(20),
         ),
         prefixIcon: const Icon(Icons.lock),
+        suffixIcon: IconButton(
+          onPressed: () => setState(() => _obscure = !_obscure),
+          icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
+        ),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -83,7 +91,7 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget loginButton(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 60,
+      height: 56,
       margin: const EdgeInsets.only(top: 10),
       child: ElevatedButton(
         onPressed: () async {
@@ -99,7 +107,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 _passwordController.text == savedPassword) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                MaterialPageRoute(builder: (context) => HomeScreen(themeController: widget.themeController)),
               );
             } else {
               // error message below
@@ -109,20 +117,13 @@ class _LogInScreenState extends State<LogInScreen> {
             }
           }
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFD1B48C),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          elevation: 5,
-        ),
+        // Use theme-provided button colors for correct contrast in dark/light
         child: const Text(
           "Login",
           style: TextStyle(
             fontFamily: 'Poppins',
-            color: Colors.black,
             fontSize: 22,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),
@@ -144,14 +145,21 @@ class _LogInScreenState extends State<LogInScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+              MaterialPageRoute(builder: (context) => WelcomeScreen(themeController: widget.themeController)),
             );
           },
         ),
+        actions: [
+          IconButton(
+            tooltip: 'Toggle theme',
+            onPressed: () => widget.themeController.toggle(),
+            icon: const Icon(Icons.brightness_6),
+          ),
+        ],
       ),
       extendBodyBehindAppBar: true,
       body: loginRegistration(
@@ -161,13 +169,13 @@ class _LogInScreenState extends State<LogInScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
               padding: const EdgeInsets.all(25),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
+                    color: Colors.black.withOpacity(0.10),
+                    blurRadius: 24,
+                    offset: const Offset(0, 8),
                   ),
                 ],
               ),
@@ -176,7 +184,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    loginTitleText(),
+                    loginTitleText(context),
                     const SizedBox(height: 25),
                     emailField(),
                     const SizedBox(height: 20),
@@ -189,14 +197,13 @@ class _LogInScreenState extends State<LogInScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const SignUpScreen()),
+                              builder: (context) => SignUpScreen(themeController: widget.themeController)),
                         );
                       },
                       child: const Text(
                         "Don't have an account? Sign Up",
                         style: TextStyle(
                           fontFamily: 'Poppins',
-                          color: Colors.black54,
                           fontSize: 16,
                         ),
                       ),

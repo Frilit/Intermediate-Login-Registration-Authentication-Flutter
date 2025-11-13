@@ -6,22 +6,56 @@ class loginRegistration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // --- variables/widgets first ---
+    final colorScheme = Theme.of(context).colorScheme;
+    final BoxDecoration background = BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          colorScheme.surface,
+          colorScheme.surfaceContainerHighest.withOpacity(0.6),
+        ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+    );
+
     return Stack(
       children: [
-        // Custom background image
-        Transform.scale(
-          scale: 1.5, // increase to make background appear closer
-          child: Image.asset(
-            'assets/images/background.jpg',
-            fit: BoxFit.cover, // Scale the image to completely cover the box
-            width: double.infinity, // expand to fill all the available horizontal space
-            height: double.infinity, // fill all the available vertical space
-          ),
+        // Custom background without image
+        Container(decoration: background),
+        Positioned(
+          top: -50,
+          left: -40,
+          child: _softBlob(220, colorScheme.primary.withOpacity(0.08)),
+        ),
+        Positioned(
+          bottom: -70,
+          right: -30,
+          child: _softBlob(260, colorScheme.tertiary.withOpacity(0.08)),
         ),
 
         // Foreground contents
         SafeArea(child: child),
       ],
+    );
+  }
+
+  // helper for soft circular blob
+  Widget _softBlob(double size, Color color) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 36,
+            spreadRadius: 12,
+          ),
+        ],
+      ),
     );
   }
 }

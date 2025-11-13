@@ -3,10 +3,12 @@ import 'welcome_screen.dart'; // Import to navigate back to WelcomeScreen
 import 'package:login_registration_app/resuable_widgets/login-registration.dart'; // import reusable layout
 import 'log_in.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // shared preference package for local storage
+import 'package:login_registration_app/themes/theme_controller.dart';
 
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  final ThemeController themeController; // for theme toggling
+  const SignUpScreen({super.key, required this.themeController});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -19,18 +21,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  bool _obscure = true;
+  bool _obscureConfirm = true;
 
-  var titleText = const Center(
-    child: Text(
-      "Sign Up",
-      style: TextStyle(
-        fontFamily: 'Poppins',
-        fontSize: 30,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
+  Widget titleText(BuildContext context) {
+    final color = Theme.of(context).colorScheme.onSurface;
+    return Center(
+      child: Text(
+        "Sign Up",
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: color,
+        ),
       ),
-    ),
-  );
+    );
+  }
 
   Widget fullNameField() {
     return TextFormField(
@@ -78,7 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget passwordField() {
     return TextFormField(
       controller: _passwordController,
-      obscureText: true,
+      obscureText: _obscure,
       decoration: InputDecoration(
         labelText: "Password",
         labelStyle: const TextStyle(fontFamily: 'Poppins'),
@@ -86,6 +94,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           borderRadius: BorderRadius.circular(20),
         ),
         prefixIcon: const Icon(Icons.lock),
+        suffixIcon: IconButton(
+          onPressed: () => setState(() => _obscure = !_obscure),
+          icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
+        ),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -98,10 +110,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  Widget confirmPasswordField() {
+    return TextFormField(
+      controller: _confirmPasswordController,
+      obscureText: _obscureConfirm,
+      decoration: InputDecoration(
+        labelText: "Confirm Password",
+        labelStyle: const TextStyle(fontFamily: 'Poppins'),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        prefixIcon: const Icon(Icons.lock_outline),
+        suffixIcon: IconButton(
+          onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
+          icon: Icon(_obscureConfirm ? Icons.visibility : Icons.visibility_off),
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Please confirm your password";
+        }
+        if (value != _passwordController.text) {
+          return "Passwords do not match";
+        }
+        return null;
+      },
+    );
+  }
+
   Widget signUpButton(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 60,
+      height: 56,
       margin: const EdgeInsets.only(top: 10),
       child: ElevatedButton(
         onPressed: () async {
@@ -115,24 +155,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
             // Navigate to Login screen
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const LogInScreen()),
+              MaterialPageRoute(builder: (context) => LogInScreen(themeController: widget.themeController)),
             );
           }
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFD1B48C),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          elevation: 5,
-        ),
+        // Use themed button to ensure proper contrast
         child: const Text(
           "Sign Up",
           style: TextStyle(
             fontFamily: 'Poppins',
-            color: Colors.black,
             fontSize: 22,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),
@@ -144,6 +177,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _fullNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -154,14 +188,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+              MaterialPageRoute(builder: (context) => WelcomeScreen(themeController: widget.themeController)),
             );
           },
         ),
+        actions: [
+          IconButton(
+            tooltip: 'Toggle theme',
+            onPressed: () => widget.themeController.toggle(),
+            icon: const Icon(Icons.brightness_6),
+          ),
+        ],
       ),
       extendBodyBehindAppBar: true,
       body: loginRegistration(
@@ -171,13 +212,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
               padding: const EdgeInsets.all(25),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
+                    color: Colors.black.withOpacity(0.10),
+                    blurRadius: 24,
+                    offset: const Offset(0, 8),
                   ),
                 ],
               ),
@@ -188,13 +229,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                      titleText,
+                      titleText(context),
                     const SizedBox(height: 25),
                     fullNameField(),
                     const SizedBox(height: 20),
                     emailField(),
                     const SizedBox(height: 20),
                     passwordField(),
+                    const SizedBox(height: 20),
+                    confirmPasswordField(),
                     const SizedBox(height: 30),
                     signUpButton(context),
                   ],

@@ -1,63 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:login_registration_app/resuable_widgets/background.dart'; // import reusable layout
+import 'package:login_registration_app/themes/theme_controller.dart';
 import 'sign_up.dart';
 import 'log_in.dart';
 
 var logo = Container(
   alignment: Alignment.center,
-  margin: const EdgeInsets.only(left: 20, right: 20),
+  margin: const EdgeInsets.symmetric(horizontal: 24),
   child: Image.asset(
     'assets/images/FillerPic.png',
     width: double.infinity,
-    height: 400,
-    fit: BoxFit.cover,
+    height: 220,
+    fit: BoxFit.contain,
   ),
 );
 
-var greetingText = const Center(
-  child: Text(
-    "Welcome to My Application!",
-    style: TextStyle(
-      fontFamily: 'Poppins',
-      color: Colors.white,
-      fontSize: 40,
-      fontWeight: FontWeight.w600,
+Widget greetingText(BuildContext context) {
+  final colorScheme = Theme.of(context).colorScheme;
+  return Center(
+    child: Text(
+      "Welcome to My Application!",
+      style: TextStyle(
+        fontFamily: 'Poppins',
+        color: colorScheme.onSurface,
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+      ),
+      textAlign: TextAlign.center,
     ),
-    textAlign: TextAlign.center,
-  ),
-);
+  );
+}
 
 // Login Button Variable
-Widget loginButton(BuildContext context) {
+Widget loginButton(BuildContext context, ThemeController themeController) {
   return Container(
     width: 350,
-    height: 70,
-    margin: const EdgeInsets.only(top: 90), // margin above the button for space
+    height: 64,
+    margin: const EdgeInsets.only(top: 40), // margin above the button for space
     child: ElevatedButton( // shadow or raised appearance
       onPressed: () {
         // ✅ Added context.mounted check and removed const for proper navigation
         if (context.mounted) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => LogInScreen(key: UniqueKey())),
+            MaterialPageRoute(builder: (context) => LogInScreen(key: UniqueKey(), themeController: themeController)),
           );
         }
       },
-      style: ElevatedButton
-          .styleFrom( // customize the visual style of a Material button
-        backgroundColor: const Color(0xFFD1B48C), // light brown color
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        elevation: 5,
-      ),
+      style: ElevatedButton.styleFrom(),
       child: const Text(
         "Login",
         style: TextStyle(
           fontFamily: 'Poppins',
-          color: Colors.black,
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
         ),
       ),
     ),
@@ -65,10 +61,10 @@ Widget loginButton(BuildContext context) {
 }
 
 // Sign Up Button Function
-Widget signupButton(BuildContext context) {
+Widget signupButton(BuildContext context, ThemeController themeController) {
   return Container(
     width: 350,
-    height: 70,
+    height: 64,
     margin: const EdgeInsets.only(top: 15),
     child: ElevatedButton( // button with shadow or raised appearance
       onPressed: () {
@@ -77,24 +73,17 @@ Widget signupButton(BuildContext context) {
           // Navigate to the Sign Up Screen when pressed
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SignUpScreen(key: UniqueKey())),
+            MaterialPageRoute(builder: (context) => SignUpScreen(key: UniqueKey(), themeController: themeController)),
           );
         }
       },
-      style: ElevatedButton.styleFrom( // customize the visual style of a Material button
-        backgroundColor: const Color(0xFFD1B48C), // light brown color
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        elevation: 5, // adds a shadow effect for a raised appearance
-      ),
+      style: ElevatedButton.styleFrom(),
       child: const Text(
         "Sign Up",
         style: TextStyle(
           fontFamily: 'Poppins',
-          color: Colors.black,
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
         ),
       ),
     ),
@@ -103,7 +92,8 @@ Widget signupButton(BuildContext context) {
 
 
 class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+  final ThemeController themeController; // for toggling theme in the flow
+  const WelcomeScreen({super.key, required this.themeController});
 
   // This widget will be used under main.dart
   // It will be called there to display the contents of welcome_screen.dart as
@@ -111,15 +101,50 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return BackgroundLayout( // uses reusable background
-      child: Column(
-        mainAxisSize: MainAxisSize.min, // Makes sure widgets stay grouped together in the center instead of being stretched vertically across the screen.
-        children: [
-          logo,
-          greetingText,
-          loginButton(context),
-          signupButton(context),
-        ],
+      child: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // grouped in the center
+              children: [
+                const SizedBox(height: 16),
+                logo,
+                const SizedBox(height: 12),
+                greetingText(context),
+                const SizedBox(height: 16),
+                Text(
+                  "Sign in to continue or create a new account",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: colorScheme.onSurfaceVariant,
+                    fontSize: 14,
+                    height: 1.4,
+                  ),
+                ),
+                loginButton(context, themeController),
+                signupButton(context, themeController),
+                const SizedBox(height: 20),
+                // theme toggle
+                OutlinedButton.icon(
+                  onPressed: () => themeController.toggle(),
+                  icon: Icon(
+                    Icons.brightness_6,
+                    color: colorScheme.primary,
+                  ),
+                  label: const Text(
+                    'Toggle Light/Dark',
+                    style: TextStyle(fontFamily: 'Poppins'),
+                  ),
+                ),
+                const SizedBox(height: 40),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
