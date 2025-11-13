@@ -39,7 +39,7 @@ Widget loginButton(BuildContext context, ThemeController themeController) {
     margin: const EdgeInsets.only(top: 40), // margin above the button for space
     child: ElevatedButton( // shadow or raised appearance
       onPressed: () {
-        // ✅ Added context.mounted check and removed const for proper navigation
+        // Added context.mounted check and removed const for proper navigation
         if (context.mounted) {
           Navigator.push(
             context,

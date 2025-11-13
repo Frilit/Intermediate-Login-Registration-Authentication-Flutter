@@ -53,65 +53,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     });
   }
 
-  // open bottom sheet to edit the display name quickly
-  Future<void> _editNameSheet() async {
-    final controller = TextEditingController(text: _displayName);
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) {
-        final bottom = MediaQuery.of(ctx).viewInsets.bottom;
-        return Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: bottom + 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Edit display name',
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 18, fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: controller,
-                decoration: const InputDecoration(
-                  labelText: 'Full Name',
-                  prefixIcon: Icon(Icons.person),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(ctx),
-                    child: const Text('Cancel'),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final text = controller.text.trim();
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setString('fullName', text);
-                      if (!mounted) return;
-                      setState(() {
-                        _displayName = text;
-                      });
-                      Navigator.pop(ctx);
-                    },
-                    child: const Text('Save'),
-                  )
-                ],
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
+  // quick-edit name sheet removed per request
 
   // helper: build an animated shimmer overlay using alignment tween from left to right
   Widget _shimmerSweep(Color base) {
@@ -163,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final amount = _formatPhp(34000.56);
     return BackgroundLayout(
       child: Stack(
-        children: [
+        children: <Widget>[
           Align(
             alignment: Alignment.center,
             child: Container(
@@ -176,22 +118,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               height: double.infinity,
             ),
           ),
-
-          // --- Page Content ---
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header (profile + title + theme + exit)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: _editNameSheet,
-                          child: CircleAvatar(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          CircleAvatar(
                             radius: 18,
                             backgroundColor: colorScheme.primary,
                             foregroundColor: colorScheme.onPrimary,
@@ -200,153 +139,138 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               style: const TextStyle(fontWeight: FontWeight.w700),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          "SSang Co. Bank",
-                          style: TextStyle(
-                            color: colorScheme.onSurface,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(children: [
-                      IconButton(
-                        tooltip: 'Toggle theme',
-                        icon: const Icon(Icons.brightness_6),
-                        color: colorScheme.onSurface,
-                        onPressed: () => widget.themeController?.toggle(),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.logout),
-                        color: colorScheme.onSurface,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ])
-                  ],
-                ),
-                const SizedBox(height: 30),
-
-                // Account info with gradient + shimmer + blur-toggle
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [colorScheme.primary, colorScheme.secondary],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
-                        blurRadius: 24,
-                        offset: const Offset(0, 12),
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                          const SizedBox(width: 12),
                           Text(
-                            _displayName.isNotEmpty ? "Welcome, $_displayName!" : "Welcome!",
-                            style: const TextStyle(
-                              fontSize: 24,
-                              color: Colors.white,
+                            "SSang Co. Bank",
+                            style: TextStyle(
+                              color: colorScheme.onSurface,
+                              fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            "My Account",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white70,
-                            ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          IconButton(
+                            tooltip: 'Toggle theme',
+                            icon: const Icon(Icons.brightness_6),
+                            color: colorScheme.onSurface,
+                            onPressed: () => widget.themeController?.toggle(),
                           ),
-                          const SizedBox(height: 12),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: AnimatedBuilder(
-                                  animation: _blurController,
-                                  builder: (context, child) {
-                                    final sigma = 6.0 * _blurController.value;
-                                    return ClipRect(
-                                      child: ImageFiltered(
-                                        imageFilter: ui.ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
-                                        child: Text(
-                                          amount,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontSize: 34,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamilyFallback: ['Roboto', 'Noto Sans', 'Segoe UI Symbol', 'Arial'],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: _toggleHide,
-                                color: Colors.white,
-                                icon: Icon(_isHidden ? Icons.visibility : Icons.visibility_off),
-                                tooltip: _isHidden ? 'Show balance' : 'Hide balance',
-                              )
-                            ],
+                          IconButton(
+                            icon: const Icon(Icons.logout),
+                            color: colorScheme.onSurface,
+                            onPressed: () => Navigator.pop(context),
                           ),
                         ],
                       ),
-                      Positioned.fill(child: _shimmerSweep(colorScheme.secondary)),
                     ],
                   ),
-                ),
-
-                const SizedBox(height: 30),
-
-                // Quick actions
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildActionButton(Icons.account_balance_wallet, "Deposit", colorScheme),
-                    _buildActionButton(Icons.send, "Transfer", colorScheme),
-                    _buildActionButton(Icons.qr_code, "Scan QR", colorScheme),
-                  ],
-                ),
-
-                const SizedBox(height: 30),
-
-                // Feature cards
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildFeatureCard(Icons.receipt_long, "Pay Bills", colorScheme),
-                    _buildFeatureCard(Icons.phone_android, "Buy Load", colorScheme),
-                  ],
-                ),
-
-                const Spacer(),
-
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10, right: 5),
+                  const SizedBox(height: 30),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: <Color>[colorScheme.primary, colorScheme.secondary],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.15),
+                          blurRadius: 24,
+                          offset: const Offset(0, 12),
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              _displayName.isNotEmpty ? "Welcome, $_displayName!" : "Welcome!",
+                              style: const TextStyle(
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              "My Account",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white70,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Expanded(
+                                  child: AnimatedBuilder(
+                                    animation: _blurController,
+                                    builder: (BuildContext context, Widget? child) {
+                                      final double sigma = 6.0 * _blurController.value;
+                                      return ClipRect(
+                                        child: ImageFiltered(
+                                          imageFilter: ui.ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
+                                          child: Text(
+                                            amount,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 34,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamilyFallback: <String>['Roboto', 'Noto Sans', 'Segoe UI Symbol', 'Arial'],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: _toggleHide,
+                                  color: Colors.white,
+                                  icon: Icon(_isHidden ? Icons.visibility : Icons.visibility_off),
+                                  tooltip: _isHidden ? 'Show balance' : 'Hide balance',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Positioned.fill(child: _shimmerSweep(colorScheme.secondary)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      _buildActionButton(Icons.account_balance_wallet, "Deposit", colorScheme),
+                      _buildActionButton(Icons.send, "Transfer", colorScheme),
+                      _buildActionButton(Icons.qr_code, "Scan QR", colorScheme),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      _buildFeatureCard(Icons.receipt_long, "Pay Bills", colorScheme),
+                      _buildFeatureCard(Icons.phone_android, "Buy Load", colorScheme),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Align(
+                    alignment: Alignment.centerRight,
                     child: TextButton.icon(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                      onPressed: () => Navigator.pop(context),
                       icon: Icon(Icons.exit_to_app, color: colorScheme.onSurface),
                       label: Text(
                         "Exit",
@@ -354,8 +278,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
