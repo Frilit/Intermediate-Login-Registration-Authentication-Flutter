@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_registration_app/resuable_widgets/background.dart'; // import your reusable layout
+import 'package:login_registration_app/resuable_widgets/background.dart'; // import reusable layout
 import 'sign_up.dart';
 import 'log_in.dart';
 
@@ -35,10 +35,13 @@ Widget loginButton(BuildContext context) {
     margin: const EdgeInsets.only(top: 90), // margin above the button for space
     child: ElevatedButton( // shadow or raised appearance
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const LogInScreen()),
-        );
+        // ✅ Added context.mounted check and removed const for proper navigation
+        if (context.mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LogInScreen(key: UniqueKey())),
+          );
+        }
       },
       style: ElevatedButton
           .styleFrom( // customize the visual style of a Material button
@@ -60,6 +63,7 @@ Widget loginButton(BuildContext context) {
     ),
   );
 }
+
 // Sign Up Button Function
 Widget signupButton(BuildContext context) {
   return Container(
@@ -68,11 +72,14 @@ Widget signupButton(BuildContext context) {
     margin: const EdgeInsets.only(top: 15),
     child: ElevatedButton( // button with shadow or raised appearance
       onPressed: () {
-        // ✅ Navigate to the Sign Up Screen when pressed
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const SignUpScreen()),
-        );
+        // Added context.mounted and removed const to avoid const
+        if (context.mounted) {
+          // Navigate to the Sign Up Screen when pressed
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SignUpScreen(key: UniqueKey())),
+          );
+        }
       },
       style: ElevatedButton.styleFrom( // customize the visual style of a Material button
         backgroundColor: const Color(0xFFD1B48C), // light brown color

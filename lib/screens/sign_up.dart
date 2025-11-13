@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'welcome_screen.dart'; // Import to navigate back to WelcomeScreen
-import 'package:login_registration_app/resuable_widgets/login-registration.dart'; // import your reusable layout
+import 'package:login_registration_app/resuable_widgets/login-registration.dart'; // import reusable layout
 import 'log_in.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // shared preference package for local storage
 
@@ -182,13 +182,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ],
               ),
 
-              // Use variable widgets here
+
               child: Form(
                 key: _formKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    titleText,
+                      titleText,
                     const SizedBox(height: 25),
                     fullNameField(),
                     const SizedBox(height: 20),

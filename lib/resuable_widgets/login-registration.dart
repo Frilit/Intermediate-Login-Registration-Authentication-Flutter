@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class loginRegistration extends StatelessWidget {
-  final Widget child; // the foreground widget (your signup/login form)
+  final Widget child; // the foreground widget (signup/login form)
   const loginRegistration({super.key, required this.child});
 
   @override

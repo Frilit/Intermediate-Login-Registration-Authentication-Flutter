@@ -15,9 +15,9 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInScreenState extends State<LogInScreen> {
   final _formKey = GlobalKey<FormState>(); // For form validation
+  // TextEditingControllers read the text typed into the email and password field
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
 
   Widget loginTitleText() {
     return const Center(
