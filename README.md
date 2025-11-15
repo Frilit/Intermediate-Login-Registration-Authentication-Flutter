@@ -1,16 +1,43 @@
-# login_registration_app
+# Intermediate Login & Registration (Flutter)
 
-Flutter Intermediate Project showcasing login and registration feature with credentials saved locally
+A modern and intermediate level Flutter app demonstrating a clean flow (Splash screen → Welcome page → Login/Sign Up forms → Home page) with persistent light/dark mode and locally stored user info recommended for local storages only. The UI uses Poppins typography, gradient backgrounds (no more heavy images from the first drafts), and a refreshed Home experience.
 
-## Getting Started
+## Main Features Implemented
 
-This project is a starting point for a Flutter application.
+- **Onboarding Flow:** Splash screen with animation → Welcome → Login or Sign Up → Home.
+- **Local Authentication State:** Stores basic user info (e.g., `fullName`, `email`) using the SharedPreferences package.
+- **Theming:** Material 3 with `ColorScheme.fromSeed`, Poppins via `google_fonts`, and a theme toggle with persisted `ThemeMode`. Improved UI design. 
+- **Modern Backgrounds:** Reusable gradient backgrounds with soft shapes. For Modularity and efficiency. 
+- **Home Page Features:**
+	- **Balance hide/reveal:** Blur animation to obscure or show the balance.
+	- **Gradient account card:** Shimmers on the first load for creative interaction.
+	- **Profile initial avatar:** Displays the first letter of the saved name. Cannot be edited. 
 
-A few resources to get you started if this is your first Flutter project:
+## List of Widgets Used
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **App/Scaffold:** `MaterialApp`, `Scaffold`, `SafeArea`.
+- **Layout:** `Stack`, `Positioned`, `Column`, `Row`, `Expanded`, `SingleChildScrollView`, `Padding`, `Align`, `Container`.
+- **Styling:** `BoxDecoration`, `LinearGradient`, `CircleAvatar`, `IconButton`, `ElevatedButton`, `OutlinedButton`.
+- **Text/Images:** `Text`, `Image.asset`, `Icon`.
+- **Animations:** `AnimationController`, `FadeTransition`, `ScaleTransition`, `AnimatedBuilder`, `ClipRect`, `ImageFiltered` (for blur).
+- **Async/State:** `FutureBuilder`, `AnimatedBuilder` (for theme), `SharedPreferences` (persistence).
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Steps to Run the Project
+
+Option A — Terminal (Flutter CLI):
+
+```powershell
+cd "directory of the flutter project folder"
+flutter pub get
+flutter run
+```
+
+Option B — Android Studio (Run button):
+- Open the project folder in Android Studio.
+- Let it finish syncing and fetching packages.
+- Select an emulator or connected Android device.
+- Press the Run ▶ button.
+
+Notes:
+- If you previously installed the app on the device, uninstall first for a completely clean state (clears saved `SharedPreferences`).
+- This project uses local storage only.
