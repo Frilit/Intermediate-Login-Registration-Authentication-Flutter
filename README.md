@@ -20,7 +20,6 @@ A modern and intermediate level Flutter app demonstrating a clean flow (Splash s
 - **Styling:** `BoxDecoration`, `LinearGradient`, `CircleAvatar`, `IconButton`, `ElevatedButton`, `OutlinedButton`.
 - **Text/Images:** `Text`, `Image.asset`, `Icon`.
 - **Animations:** `AnimationController`, `FadeTransition`, `ScaleTransition`, `AnimatedBuilder`, `ClipRect`, `ImageFiltered` (for blur).
-- **Async/State:** `FutureBuilder`, `AnimatedBuilder` (for theme), `SharedPreferences` (package).
 
 ## Steps to Run the Project
 
