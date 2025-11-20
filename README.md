@@ -15,11 +15,14 @@ A modern and intermediate level Flutter app demonstrating a clean flow (Splash s
 
 ## List of Widgets Used
 
-- **App/Scaffold:** `MaterialApp`, `Scaffold`, `SafeArea`.
-- **Layout:** `Stack`, `Positioned`, `Column`, `Row`, `Expanded`, `SingleChildScrollView`, `Padding`, `Align`, `Container`.
-- **Styling:** `BoxDecoration`, `LinearGradient`, `CircleAvatar`, `IconButton`, `ElevatedButton`, `OutlinedButton`.
-- **Text/Images:** `Text`, `Image.asset`, `Icon`.
-- **Animations:** `AnimationController`, `FadeTransition`, `ScaleTransition`, `AnimatedBuilder`, `ClipRect`, `ImageFiltered` (for blur).
+- **Structure:** `MaterialApp`, `Scaffold`, `SafeArea`, `AppBar`
+- **Layout:** `Stack`, `Positioned`, `Align`, `Center`, `Padding`, `SingleChildScrollView`, `Column`, `Row`, `Expanded`, `SizedBox`, `Container`, `ClipRect`, `FractionallySizedBox`, `DecoratedBox`
+- **Text & Media:** `Text`, `Image` (via `Image.asset`), `CircleAvatar`, `Icon`
+- **Inputs & Forms:** `Form`, `TextFormField`
+- **Buttons:** `ElevatedButton`, `OutlinedButton`, `TextButton`, `IconButton`
+- **Animation & Effects:** `AnimatedBuilder`, `FadeTransition`, `ScaleTransition`, `ImageFiltered`
+- **Async Builders:** `FutureBuilder`
+- **Feedback & Indicators:** `SnackBar`, `CircularProgressIndicator`
 
 ## Steps to Run the Project
 
