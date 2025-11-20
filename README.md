@@ -6,7 +6,7 @@ A modern and intermediate level Flutter app demonstrating a clean flow (Splash s
 
 1. **Onboarding Flow:** Splash screen with animation → Welcome → Login or Sign Up → Home.
 2. **Local Authentication State:** Stores basic user info (e.g., `fullName`, `email`) using the SharedPreferences package.
-3. **Theming:** Material 3 with `ColorScheme.fromSeed`, Poppins via `google_fonts`, and a theme toggle with persisted `ThemeMode`. Improved UI design. 
+3. **Theming:** Material 3 with `ColorScheme.fromSeed`, Poppins via `google_fonts`, and a theme toggle with persisted `ThemeMode`. All made to improve UI design. 
 4. **Modern Backgrounds:** Reusable gradient backgrounds with soft shapes. For Modularity and efficiency. 
 5. **Home Page Features:**
 	- **Balance hide/reveal:** Blur animation to obscure or show the balance.
